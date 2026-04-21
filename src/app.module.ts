@@ -1,15 +1,20 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { CatalogModule } from './catalog/catalog.module';
-import { OrdersModule } from './orders/orders.module';
-import { ReviewsModule } from './reviews/reviews.module';
-import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, CatalogModule, OrdersModule, ReviewsModule, AdminModule],
+  imports: [TypeOrmModule.forRoot({
+    type:'mysql',
+    host:'localhost',
+    port:3306,
+    username:'root',
+    password:process.env.DB_PASSWORD,
+    database:'flower_store_db',
+    entities:[__dirname+'/**/*/.entity{.ts,.js}'],
+    synchronize:false
+  }), UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
