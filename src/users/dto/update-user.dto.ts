@@ -1,37 +1,31 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, MinLength } from "class-validator";
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsOptional, IsString, IsPhoneNumber, IsDateString, MinLength } from 'class-validator';
 
+export class UpdateUserDto {
+  @ApiPropertyOptional({description:'',example:''})
+  @IsOptional()
+  @IsEmail()
+  email?: string;
 
-export class UpdateUserDto{
+  @ApiPropertyOptional({description:'',example:''})
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  first_name?: string;
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsEmail()
-    email!:string
+  @ApiPropertyOptional({description:'',example:''})
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  last_name?: string;
 
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(6)
-    password_hash!:string
+  @ApiPropertyOptional({description:'',example:''})
+  @IsOptional()
+  @IsPhoneNumber('RU')
+  phone_number?: string;
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsPhoneNumber('RU')
-    phone_number!:string
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    first_name!:string
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    last_name!:string
-
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsString()
-    birthday?:string
+  @ApiPropertyOptional({description:'',example:''})
+  @IsOptional()
+  @IsDateString()
+  birthday?: string; 
 }

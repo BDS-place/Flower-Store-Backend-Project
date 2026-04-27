@@ -5,7 +5,7 @@ export class Users{
 
     @ApiProperty({description: 'Уникальный идентификатор пользователя', example:'123'})
     @PrimaryGeneratedColumn()
-    id!:number
+    user_id!:number
 
     @ApiProperty({description:'Email пользователя, обязательно уникальный',example:'example@index.com'})
     @Column()
@@ -34,6 +34,10 @@ export class Users{
     @ApiProperty({description:'Статус аккаунта пользователя',example:true})
     @Column({default:true})
     is_active!:boolean
+
+    @ApiProperty({description:'',example:''})
+    @Column({default:'customer'})
+    role:string
 
     @ApiProperty({description:'Дата создания пользователя',example:'2024-01-15T10:30:00.000Z'})
     @CreateDateColumn()

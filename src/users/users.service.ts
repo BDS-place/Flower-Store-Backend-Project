@@ -1,10 +1,11 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -29,19 +30,39 @@ export class UsersService {
         throw err
     }
     }
-    async update(updateUserDto:UpdateUserDto, id:number):Promise<Users>{
-        const{password_hash,email,phone_number,...userData} = updateUserDto
+    async updateProfile(id: number, updateData:UpdateUserDto):Promise<Users>{
+        const user = await this.usersRepository.findOneBy({user_id:id})
+        if(!user) throw new NotFoundException('User not found');
+
+        if(updateData.email && updateData.email !== user.email){
+            const existing = await this.usersRepository.findOneBy({email:updateData.email})
+            if(existing) throw new ConflictException('Email already in use')
+        }
+
+        Object.assign(user,updateData)
+        return this.usersRepository.save(user)
+    }
+    async changePassword(id:number, dto:ChangePasswordDto): Promise<void>{
+        const user = await this.usersRepository.findOneBy({user_id:id})
+        if(!user) throw new NotFoundException('User not found')
+        
+        const isMatch = await bcrypt.compare(dto.old_password, user.password_hash)
+        if(!isMatch) throw new UnauthorizedException('Wrong password')
+        user.password_hash = await bcrypt.hash(dto.new_password, 10)
+        await this.usersRepository.save(user)
     } 
-    async delete():Promise<Users>{
-    }
-    async findAll():Promise<Users>{
-    }
-    async find(id:number):Promise<Users>{
-        const user = await this.usersRepository.findOneBy({id});
+    async find(user_id:number):Promise<Users>{
+        const user = await this.usersRepository.findOneBy({user_id});
         if(!user) {
-        throw new NotFoundException()
+        throw new NotFoundException('User not found')
         }
         return user
     }
-
+async delete(user_id: number) {
+    const result = await this.usersRepository.delete({ user_id });
+    if (result.affected === 0) {
+        throw new NotFoundException('User not found');
+    }
+    return { success: true, deletedId: user_id };
+}
 }
