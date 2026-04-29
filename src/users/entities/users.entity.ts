@@ -37,8 +37,8 @@ export class Users{
 
     @ApiProperty({description:'',example:''})
     @Column({default:'customer'})
-    role:string
-
+    role!:string
+    
     @ApiProperty({description:'Дата создания пользователя',example:'2024-01-15T10:30:00.000Z'})
     @CreateDateColumn()
     created_at!:Date
@@ -46,4 +46,8 @@ export class Users{
     @ApiProperty({description:'Дата обновления пользователя',example:'2024-02-15T10:30:00.000Z'})
     @UpdateDateColumn()
     updated_at!:Date
+
+    @ApiProperty()
+    @Column({ type: 'varchar', nullable: true, select: false })
+    refresh_token_hash?: string | null;
 }

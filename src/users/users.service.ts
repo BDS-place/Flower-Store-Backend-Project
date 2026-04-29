@@ -65,4 +65,22 @@ async delete(user_id: number) {
     }
     return { success: true, deletedId: user_id };
 }
+
+    async findByEmail(email: string): Promise<Users | null> {
+        return this.usersRepository.findOne({ where: { email } });
+    }
+
+    async findById(id: number): Promise<Users | null> {
+        return this.usersRepository.findOne({ where: { user_id: id } });
+    }
+
+    async updateRefreshTokenHash(userId: number, hash: string | null) {
+        return this.usersRepository.update(userId, { refresh_token_hash: hash });
+    }
+    async findByIdWithRefreshToken(id: number): Promise<Users | null> {
+    return this.usersRepository.findOne({
+        where: { user_id: id },
+        select: ['user_id', 'email', 'role', 'refresh_token_hash'], // нужные поля
+    });
+    }
 }

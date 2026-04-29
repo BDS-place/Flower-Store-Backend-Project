@@ -6,6 +6,10 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProductsModule } from './products/products.module';
 import { ProductTypesModule } from './product-types/product-types.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guards/roles.guard';
+import { OrdersModule } from './orders/orders.module';
 
 
 @Module({
@@ -24,8 +28,11 @@ import { ProductTypesModule } from './product-types/product-types.module';
     entities:[__dirname+'/**/*.entity{.ts,.js}'],
     synchronize:false
     })
-  }), UsersModule, ProductsModule, ProductTypesModule],
+  }), UsersModule, ProductsModule, ProductTypesModule, AuthModule, OrdersModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,{
+    provide:APP_GUARD,
+    useClass:RolesGuard,
+  }],
 })
 export class AppModule {}
