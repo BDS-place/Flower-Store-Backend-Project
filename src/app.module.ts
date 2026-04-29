@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ProductsModule } from './products/products.module';
+import { ProductTypesModule } from './product-types/product-types.module';
+
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -21,7 +24,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     entities:[__dirname+'/**/*.entity{.ts,.js}'],
     synchronize:false
     })
-  }), UsersModule],
+  }), UsersModule, ProductsModule, ProductTypesModule],
   controllers: [AppController],
   providers: [AppService],
 })

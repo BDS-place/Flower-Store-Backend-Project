@@ -11,7 +11,7 @@ export class UsersController {
     @ApiOperation({summary:'Найти пользователя по id'})
     @ApiResponse({status:200, description:'Пользователь найден'})
     @ApiResponse({status:404, description:'Пользователь не найден'})
-    @Get(':id')
+    @Get('me')
     find(@Param('id') id:number){
         return this.usersService.find(id)
     }
@@ -24,14 +24,14 @@ export class UsersController {
     }
     @ApiOperation({summary:'Обновление пользователя'})
     @ApiResponse({})
-    @Patch('Profile')
+    @Patch('me/profile')
     updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto){
         const id = req.user.id;
         return this.usersService.updateProfile(id, updateUserDto)
     }
     @ApiOperation({summary:'Обновление пароля пользователя'})
     @ApiResponse({})
-    @Patch('Password')
+    @Patch('me/password')
     changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto){
         const id = req.user.id
         return this.usersService.changePassword(id, changePasswordDto)
