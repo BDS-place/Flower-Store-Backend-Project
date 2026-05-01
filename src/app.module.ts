@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { OrdersModule } from './orders/orders.module';
+import { DeliveryAddressesModule } from './delivery-addresses/delivery-addresses.module';
 
 
 @Module({
@@ -28,7 +29,7 @@ import { OrdersModule } from './orders/orders.module';
     entities:[__dirname+'/**/*.entity{.ts,.js}'],
     synchronize:false
     })
-  }), UsersModule, ProductsModule, ProductTypesModule, AuthModule, OrdersModule],
+  }), UsersModule, ProductsModule, ProductTypesModule, AuthModule, OrdersModule, DeliveryAddressesModule],
   controllers: [AppController],
   providers: [AppService,{
     provide:APP_GUARD,

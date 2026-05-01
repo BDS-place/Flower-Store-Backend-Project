@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { Orders } from "src/orders/entities/orders.entity";
 @Entity('users')
 export class Users{
 
@@ -50,4 +51,8 @@ export class Users{
     @ApiProperty()
     @Column({ type: 'varchar', nullable: true, select: false })
     refresh_token_hash?: string | null;
+
+    @ApiProperty()
+    @OneToMany(() => Orders, (order) => order.user)
+    orders!: Orders[]
 }
