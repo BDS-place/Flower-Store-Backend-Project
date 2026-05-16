@@ -115,4 +115,10 @@ export class ProductsService {
     if (result.affected === 0) throw new NotFoundException('Товар не найден');
     return { success: true, deletedId: id };
     }
+    async updateImage(id: number, imageUrl: string): Promise<Products> {
+        const product = await this.productsRepository.findOneBy({ product_id: id });
+        if (!product) throw new NotFoundException('Товар не найден');
+        product.image_url = imageUrl;
+        return this.productsRepository.save(product);
+    }
 }

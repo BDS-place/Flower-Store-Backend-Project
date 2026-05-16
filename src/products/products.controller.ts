@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('products')
 export class ProductsController {
@@ -22,6 +24,7 @@ export class ProductsController {
 
     @ApiOperation({summary:''})
     @ApiResponse({status:200,description:''})
+    @Public()
     @Get()
     findAll(
         @Query('sortBy') sortBy: string = 'created_at',
@@ -35,6 +38,7 @@ export class ProductsController {
     }
     @ApiOperation({summary:''})
     @ApiResponse({status:200,description:''})
+    @Public()
     @Get(':id')
     findOneById(@Param('id', ParseIntPipe) id: number){
         return this.productsService.findOneById(id)
@@ -58,4 +62,17 @@ export class ProductsController {
     remove(@Param('id', ParseIntPipe) id: number){
         return this.productsService.remove(id)
     }
+    @Patch(':id/image')
+    @UseGuards(JwtAuthGuard)
+    @Roles('admin')
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
+    async uploadImage(
+        @Param('id', ParseIntPipe) id: number,
+        @UploadedFile() file: Express.Multer.File
+    ) {
+        if (!file) throw new BadRequestException('Файл не передан');
+        const url = `/uploads/${file.filename}`;
+        return this.productsService.updateImage(id, url);
+}
 }

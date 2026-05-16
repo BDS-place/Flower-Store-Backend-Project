@@ -53,4 +53,10 @@ export class ProductTypesService {
         if(dto.description !== undefined) type.description = dto.description
         return this.productTypesRepository.save(type)
     }
+    async updateImage(id:number,imageUrl:string): Promise<ProductTypes>{
+        const productType = await this.productTypesRepository.findOneBy({product_type_id:id});
+        if(!productType)  throw new NotFoundException('Тип товара не найден');
+        productType.icon_url = imageUrl;
+        return this.productTypesRepository.save(productType)
+    }
 }
