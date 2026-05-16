@@ -9,6 +9,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -28,6 +29,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Создание пользователя (регистрация)' })
   @ApiResponse({ status: 201, description: 'Пользователь успешно создан' })
   @Post('create')
+  @Public()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -36,6 +38,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Обновить свой профиль' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+
   @Patch('me/profile')
   updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     const id = req.user.id;
@@ -45,6 +48,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Сменить пароль' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+
   @Patch('me/password')
   changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto) {
     const id = req.user.id;

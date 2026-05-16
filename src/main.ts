@@ -11,8 +11,8 @@ async function bootstrap() {
     transform: true
   }))
   const config =new DocumentBuilder()
-  .setTitle('')
-  .setDescription('')
+  .setTitle('Backend Flower Store')
+  .setDescription('Backend for Flower Store')
   .setVersion("1.0")
   .addBearerAuth()
   .addTag('')

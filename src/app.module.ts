@@ -12,6 +12,9 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { OrdersModule } from './orders/orders.module';
 import { DeliveryAddressesModule } from './delivery-addresses/delivery-addresses.module';
 import { OrderProductsModule } from './order_products/order_products.module';
+import { UploadsModule } from './uploads/uploads.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 
 @Module({
@@ -30,7 +33,10 @@ import { OrderProductsModule } from './order_products/order_products.module';
     entities:[__dirname+'/**/*.entity{.ts,.js}'],
     synchronize:false
     })
-  }), UsersModule, ProductsModule, ProductTypesModule, AuthModule, OrdersModule, DeliveryAddressesModule, OrderProductsModule],
+  }), ServeStaticModule.forRoot({
+    rootPath: join(__dirname, '..', 'uploads'),
+    serveRoot: '/uploads'
+  }), UsersModule, ProductsModule, ProductTypesModule, AuthModule, OrdersModule, DeliveryAddressesModule, OrderProductsModule, UploadsModule],
   controllers: [AppController],
   providers: [AppService,{
     provide:APP_GUARD,
