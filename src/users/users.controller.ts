@@ -1,6 +1,6 @@
 import {
   Body, Controller, Delete, Get, HttpCode, HttpStatus,
-  Param, Patch, Post, Req, UseGuards
+  Param, ParseIntPipe, Patch, Post, Req, UseGuards
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -57,7 +57,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Roles('admin')
   @Delete(':id')
-  delete(@Param('id') id: number) {
+  delete(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.delete(id);
   }
 }

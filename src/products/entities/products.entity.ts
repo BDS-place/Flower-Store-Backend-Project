@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+import OrderProducts from "src/order_products/entities/order-products.entity";
 import { ProductTypes } from "src/product-types/entities/product-types.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('products')
 export class Products{
@@ -51,4 +52,7 @@ export class Products{
     @ManyToOne(()=>ProductTypes, (pt)=>pt.products)
     @JoinColumn({name:'product_type_id'})
     productType!: ProductTypes
+
+    @OneToMany(()=> OrderProducts, (order)=> order.product)
+    order_products!:OrderProducts[]
 }

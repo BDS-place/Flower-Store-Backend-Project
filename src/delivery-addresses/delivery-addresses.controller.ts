@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { DeliveryAddressesService } from './delivery-addresses.service';
 import { CreateDeliveryAddressDto } from './dto/create-delivery-addresses.dto';
 import { UpdateDeliveryAddressesDto } from './dto/update-delivery-addresses.dto';
@@ -14,7 +14,7 @@ export class DeliveryAddressesController {
         return this.deliveryAddressesService.create(dto);
     }
     @Delete(':id')
-    delete(@Param('id') id: number){
+    delete(@Param('id', ParseIntPipe) id: number){
         return this.deliveryAddressesService.delete(id);
     }
     @Get()
@@ -22,11 +22,11 @@ export class DeliveryAddressesController {
         return this.deliveryAddressesService.findAll();
     }
     @Get(':id')
-    findOneById(@Param('id') id: number){
+    findOneById(@Param('id', ParseIntPipe) id: number){
         return this.deliveryAddressesService.findOneById(id);
     }
     @Patch(':id')
-    update(@Param('id') id:number, @Body() dto: UpdateDeliveryAddressesDto){
+    update(@Param('id', ParseIntPipe) id:number, @Body() dto: UpdateDeliveryAddressesDto){
         return this.deliveryAddressesService.update(id,dto);
     }
 }

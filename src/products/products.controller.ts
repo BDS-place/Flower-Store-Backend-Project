@@ -36,26 +36,26 @@ export class ProductsController {
     @ApiOperation({summary:''})
     @ApiResponse({status:200,description:''})
     @Get(':id')
-    findOneById(@Param('id') id: number){
+    findOneById(@Param('id', ParseIntPipe) id: number){
         return this.productsService.findOneById(id)
     }
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
-    productUpdate(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto){
+    productUpdate(@Param('id', ParseIntPipe) id: number, @Body() updateProductDto: UpdateProductDto){
         return this.productsService.productUpdate(id, updateProductDto)
     }
 
     @Patch(':id/stock')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
-    stockUpdate(@Param('id') id:number, @Body() updateStockDto: UpdateStockDto){
+    stockUpdate(@Param('id', ParseIntPipe) id:number, @Body() updateStockDto: UpdateStockDto){
         return this.productsService.stockUpdate(id, updateStockDto)
     }
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
-    remove(@Param('id') id: number){
+    remove(@Param('id', ParseIntPipe) id: number){
         return this.productsService.remove(id)
     }
 }

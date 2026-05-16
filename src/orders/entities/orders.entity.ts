@@ -1,12 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { DeliveryAddresses } from "src/delivery-addresses/entities/delivery-addresses.entity";
+import OrderProducts from "src/order_products/entities/order-products.entity";
 import { Users } from "src/users/entities/users.entity";
-import { Column, CreateDateColumn, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
+@Entity('orders')
 export class Orders{
     @ApiProperty()
     @PrimaryGeneratedColumn()
-    order_id:number
+    order_id!:number
 
     @ApiProperty()
     @ManyToOne(()=>Users, (user)=>user.orders)
@@ -23,15 +25,15 @@ export class Orders{
 
     @ApiProperty()
     @Column()
-    recipient_name:string
+    recipient_name!:string
 
     @ApiProperty()
     @Column()
-    recipient_number:string
+    recipient_number!:string
 
     @ApiProperty()
     @Column()
-    customer_comment:string
+    customer_comment!:string
 
     @ApiProperty()
     @ManyToOne(()=> DeliveryAddresses, (address)=>address.order)
@@ -48,13 +50,16 @@ export class Orders{
 
     @ApiProperty()
     @Column()
-    order_status:string
+    order_status!:string
 
     @ApiProperty()
     @CreateDateColumn()
-    created_at:Date
+    created_at!:Date
 
     @ApiProperty()
     @UpdateDateColumn()
-    update_at:Date
+    update_at!:Date
+
+    @OneToMany(()=> OrderProducts, (p)=> p.order)
+    order_products!: OrderProducts[]
 }

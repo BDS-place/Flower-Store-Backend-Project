@@ -6,7 +6,7 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 export class DeliveryAddresses{
     @ApiProperty()
     @PrimaryGeneratedColumn()
-    delivery_address_id:number
+    delivery_address_id!:number
 
     @ApiProperty()
     @Column()

@@ -54,7 +54,7 @@ export class ProductsService {
             query.andWhere('product.name ILIKE :search', { search: `%${search}%` });
         }
         if(type){
-            query.andWhere('product.product_type_id = :typeId', { type });
+            query.andWhere('product.product_type_id = :typeId', { typeId: type });
         }
 
         query.orderBy(`product.${sortBySafe}`, orderSafe);
