@@ -6,57 +6,57 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 
 @Entity('orders')
 export class Orders{
-    @ApiProperty()
+    @ApiProperty({description:'id заказа', example:1})
     @PrimaryGeneratedColumn()
     order_id!:number
 
-    @ApiProperty()
+    @ApiProperty({description:'Id пользователя', example:1})
     @ManyToOne(()=>Users, (user)=>user.orders)
     @JoinColumn({name:'user_id'})
     user!: Users
 
-    @ApiProperty()
+    @ApiProperty({description:'Номер заказа', example:'HR02052026173402'})
     @Column()
     order_number!:number
 
-    @ApiProperty()
+    @ApiProperty({description:'Дата доставки', example:'2026-05-15T10:30:00.000Z'})
     @Column()
     delivery_date!:Date
 
-    @ApiProperty()
+    @ApiProperty({description:'Имя получателя', example:'Иван'})
     @Column()
     recipient_name!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Номер получателя', example:'+74955553535'})
     @Column()
     recipient_number!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Комментарий пользователя', example:'Оставить у двери'})
     @Column()
     customer_comment!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'id адреса доставки', example:1})
     @ManyToOne(()=> DeliveryAddresses, (address)=>address.order)
     @JoinColumn({name:'delivery_address_id'})
     delivery_address_id!:DeliveryAddresses
 
-    @ApiProperty()
+    @ApiProperty({description:'Способ оплаты', example:'карта'})
     @Column()
     payment_method!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Статус оплаты', example:false})
     @Column({nullable:true})
     is_paid!:boolean
 
-    @ApiProperty()
+    @ApiProperty({description:'Статус заказа', example:'Собирается'})
     @Column()
     order_status!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Дата создания заказа',example:'2024-01-15T10:30:00.000Z'})
     @CreateDateColumn()
     created_at!:Date
 
-    @ApiProperty()
+    @ApiProperty({description:'Дата обновления заказа',example:'2024-02-15T10:30:00.000Z'})
     @UpdateDateColumn()
     update_at!:Date
 

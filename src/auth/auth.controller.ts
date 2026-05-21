@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
 import type { Request, Response } from 'express';
@@ -11,6 +11,8 @@ import type { Request, Response } from 'express';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({summary:'Вход в аккаунт'})
+  @ApiResponse({status:HttpStatus.OK, description:'Успешный вход в аккаунт'})
   @Post('login')
   @Public()
   @HttpCode(HttpStatus.OK)
@@ -37,10 +39,11 @@ export class AuthController {
     return { user: userData };
   }
 
+  @ApiOperation({ summary: 'Обновление токенов по refresh-токену' })
+  @ApiResponse({status:HttpStatus.OK, description:'Обновление токенов успешно'})
   @Post('refresh')
   @Public()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Обновление токенов по refresh-токену' })
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
@@ -64,6 +67,8 @@ export class AuthController {
     return { success: true };
   }
 
+  @ApiOperation({summary:'Выход из аккаунта'})
+  @ApiResponse({status:HttpStatus.NO_CONTENT, description:"Успешный выход из аккаунта"})
   @Post('logout')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

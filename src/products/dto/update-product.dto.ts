@@ -3,27 +3,27 @@ import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class UpdateProductDto{
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({description:'Новое название товара', example:'Роза обыкновенная'})
     @IsOptional()
     @IsString()
     name?:string
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({description:'изменение цены за единицу товара', example:10})
     @IsOptional()
     @IsNumber({maxDecimalPlaces: 2})
     price_per_unit?:number
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({description:'Изменение описания', example:'Роза обыкновнная для сада'})
     @IsOptional()
     @IsString()
     description?:string
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({description:'Изменение активности товара', example:true})
     @IsOptional()
     @IsBoolean()
     is_active?:boolean
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({description:'Изменение Id типа товара', example:1})
     @IsOptional()
     @IsNumber()
     product_type_id?:number

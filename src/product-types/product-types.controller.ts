@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProductTypesService } from './product-types.service';
 import { CreateProductTypesDto } from './dto/create-product-types.dto';
 import { ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -14,33 +14,34 @@ export class ProductTypesController {
         private readonly productTypesService: ProductTypesService
     ){}
 
-    @ApiOperation({})
-    @ApiResponse({})
+    @ApiOperation({summary:'Поиск всех типов товаров'})
+    @ApiResponse({status:200,description:'Типы товаров найдены'})
     @Get()
     @Public()
     findAll(){
         return this.productTypesService.findAll()
     }
 
-    @ApiOperation({})
-    @ApiResponse({})
+    @ApiOperation({summary:'Поиск типа товара по Id'})
+    @ApiResponse({status:200,description:'тип товара успешно найден'})
     @Public()
     @Get(':id')
     findOneById(@Param('id', ParseIntPipe) id: number){
         return this.productTypesService.findOneById(id);
     }
 
-    @ApiOperation({})
-    @ApiResponse({})
+    @ApiOperation({summary:'Создание типа товара'})
+    @ApiResponse({status:201,description:'Тип товара успешно создан'})
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
     @Post()
+    @HttpCode(HttpStatus.CREATED)
     create(@Body() dto:CreateProductTypesDto){
         return this.productTypesService.create(dto);
     }
 
-    @ApiOperation({})
-    @ApiResponse({})
+    @ApiOperation({summary:'Изменение типа товара'})
+    @ApiResponse({status:200,description:'Тип товара успешно изменен'})
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
     @Patch(':id')
@@ -48,14 +49,17 @@ export class ProductTypesController {
         return this.productTypesService.update(id,dto);
     }
     
-    @ApiOperation({})
-    @ApiResponse({})
+    @ApiOperation({summary:'Удаление типа товара'})
+    @ApiResponse({status:200,description:'Тип товара успешно удален'})
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
     @Delete(':id')
     delete(@Param('id') id: number ){
         return this.productTypesService.delete(id)
     }
+
+    @ApiOperation({summary:'Добавление изображения типа товара'})
+    @ApiResponse({status:200,description:'Изображение успешно изменено'})
     @Patch(':id/image')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')

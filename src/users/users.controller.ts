@@ -17,6 +17,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({ summary: 'Найти свой профиль (требуется JWT)' })
+  @ApiResponse({status:200, description:'Пользователь найден'})
   @ApiBearerAuth()  
   @UseGuards(JwtAuthGuard)
   @Get('me')
@@ -35,20 +36,20 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @ApiOperation({ summary: 'Обновить свой профиль' })
+  @ApiOperation({ summary: 'Обновить свой профиль (требуется JWT)' })
+  @ApiResponse({status:200, description:'Пользователь успешно изменен'})
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-
   @Patch('me/profile')
   updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     const id = req.user.id;
     return this.usersService.updateProfile(id, updateUserDto);
   }
 
-  @ApiOperation({ summary: 'Сменить пароль' })
+  @ApiOperation({ summary: 'Сменить пароль (требуется JWT)' })
+  @ApiResponse({status:200, description:'Пароль успешно изменен'})
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-
   @Patch('me/password')
   changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto) {
     const id = req.user.id;
@@ -57,6 +58,7 @@ export class UsersController {
 
 
   @ApiOperation({ summary: 'Удалить пользователя по id (требуется JWT)' })
+  @ApiResponse({status:200, description:'Пользователь успешно удален'})
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Roles('admin')

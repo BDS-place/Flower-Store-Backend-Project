@@ -5,34 +5,34 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 @Entity('product_types')
 export class ProductTypes{
 
-    @ApiProperty()
+    @ApiProperty({description:'ID типа товара', example:1})
     @PrimaryGeneratedColumn()
     product_type_id!:number
 
-    @ApiProperty()
+    @ApiProperty({description:'Название типа товара', example:'Букеты'})
     @Column()
     name!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Понятный URL', example:'buket'})
     @Column()
     slug!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'URL изобаржения типа товара', example:'/uploads/image.jpeg'})
     @Column()
     icon_url!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Описание типа товара', example:'Букеты для подарка'})
     @Column()
     description!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Дата создания типа товара',example:'2024-01-15T10:30:00.000Z'})
     @CreateDateColumn()
-    created_at:Date
+    created_at!:Date
 
-    @ApiProperty()
+    @ApiProperty({description:'Дата обновления типа товара',example:'2024-02-15T10:30:00.000Z'})
     @UpdateDateColumn()
-    updated_at:Date
+    updated_at!:Date
 
     @OneToMany(() => Products, (product) => product.productType)
-    products: Products[]
+    products!: Products[]
 }

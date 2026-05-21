@@ -15,6 +15,8 @@ import { OrderProductsModule } from './order_products/order_products.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { RedisCacheModule } from './redis-cache/redis-cache.module';
+
 
 
 @Module({
@@ -24,9 +26,9 @@ import { join } from 'path';
     imports:[ConfigModule],
     inject:[ConfigService],
     useFactory: (config: ConfigService) =>({
-    type:'postgres',
-    host:'localhost',
-    port:5432,
+    type:'mysql',
+    host: "127.0.0.1",
+    port:3306,
     username:config.get<string>('DB_PROFILE'),
     password:config.get<string>('DB_PASSWORD'),
     database:'flower_store_db',
@@ -36,7 +38,7 @@ import { join } from 'path';
   }), ServeStaticModule.forRoot({
     rootPath: join(__dirname, '..', 'uploads'),
     serveRoot: '/uploads'
-  }), UsersModule, ProductsModule, ProductTypesModule, AuthModule, OrdersModule, DeliveryAddressesModule, OrderProductsModule, UploadsModule],
+  }), UsersModule, ProductsModule, ProductTypesModule, AuthModule, OrdersModule, DeliveryAddressesModule, OrderProductsModule, UploadsModule, RedisCacheModule],
   controllers: [AppController],
   providers: [AppService,{
     provide:APP_GUARD,

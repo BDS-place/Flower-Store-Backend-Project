@@ -4,35 +4,35 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 
 @Entity('delivery_addresses')
 export class DeliveryAddresses{
-    @ApiProperty()
+    @ApiProperty({description:'Id Адреса', example:1})
     @PrimaryGeneratedColumn()
     delivery_address_id!:number
 
-    @ApiProperty()
+    @ApiProperty({description:'Город', example:'Москва'})
     @Column()
     city!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Улица', example:'Руставели'})
     @Column()
     street!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Номер дома', example:'21А'})
     @Column()
     house!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Номер квартиры', example:'105'})
     @Column()
     apartment_number!:string
 
-    @ApiProperty()
+    @ApiProperty({description:'Дата создания адреса',example:'2024-01-15T10:30:00.000Z'})
     @CreateDateColumn()
     created_at!:Date
 
-    @ApiProperty()
+    @ApiProperty({description:'Дата обновления адреса',example:'2024-02-15T10:30:00.000Z'})
     @UpdateDateColumn()
     updated_at!:Date
 
-    @ApiProperty()
+
     @OneToMany(()=>Orders, (order)=>order.delivery_address_id)
     order!:Orders[]
 }

@@ -13,8 +13,8 @@ import { Public } from 'src/auth/decorators/public.decorator';
 export class ProductsController {
     constructor(private readonly productsService: ProductsService){}
 
-    @ApiOperation({summary:''})
-    @ApiResponse({status:200,description:''})
+    @ApiOperation({summary:'Создание новых тоаров'})
+    @ApiResponse({status:200,description:'Создание нового товара'})
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
     @Post()
@@ -22,8 +22,8 @@ export class ProductsController {
         return this.productsService.create(createProductDto)
     }
 
-    @ApiOperation({summary:''})
-    @ApiResponse({status:200,description:''})
+    @ApiOperation({summary:'Поиск всех товаров'})
+    @ApiResponse({status:200,description:'Товары найдены'})
     @Public()
     @Get()
     findAll(
@@ -36,13 +36,15 @@ export class ProductsController {
     ){
         return this.productsService.findAll({sortBy, order, page, limit, type, search})
     }
-    @ApiOperation({summary:''})
-    @ApiResponse({status:200,description:''})
+    @ApiOperation({summary:'Поиск товара по id'})
+    @ApiResponse({status:200,description:'Товар найден'})
     @Public()
     @Get(':id')
     findOneById(@Param('id', ParseIntPipe) id: number){
         return this.productsService.findOneById(id)
     }
+    @ApiOperation({summary:'Изменение товара'})
+    @ApiResponse({status:200, description:'Товар успешно изменен'})
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
@@ -50,18 +52,26 @@ export class ProductsController {
         return this.productsService.productUpdate(id, updateProductDto)
     }
 
+    @ApiOperation({summary:'Изменение количества товара'})
+    @ApiResponse({status:200, description:'Количество успешно изменено'})
     @Patch(':id/stock')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
     stockUpdate(@Param('id', ParseIntPipe) id:number, @Body() updateStockDto: UpdateStockDto){
         return this.productsService.stockUpdate(id, updateStockDto)
     }
+
+    @ApiOperation({summary:'Удаление товара по Id'})
+    @ApiResponse({status:200, description:'Товар успешно удален'})
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
     remove(@Param('id', ParseIntPipe) id: number){
         return this.productsService.remove(id)
     }
+
+    @ApiOperation({summary:'Добавление изображения товара'})
+    @ApiResponse({status:200, description:'Изображение успешно добавлено'})
     @Patch(':id/image')
     @UseGuards(JwtAuthGuard)
     @Roles('admin')

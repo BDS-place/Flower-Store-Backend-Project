@@ -36,7 +36,7 @@ export class Users{
     @Column({default:true})
     is_active!:boolean
 
-    @ApiProperty({description:'',example:''})
+    @ApiProperty({description:'Роль пользователя',example:'admin'})
     @Column({default:'customer'})
     role!:string
     
