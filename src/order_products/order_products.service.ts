@@ -9,8 +9,4 @@ export class OrderProductsService {
         @InjectRepository(OrderProducts)
         private readonly orderProductsRepository: Repository<OrderProducts>
     ){}
-
-    async create (createOrderProductDto){
-        
-    }
 }

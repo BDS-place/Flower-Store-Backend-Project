@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
-    ArrayMinSize, IsArray, IsDateString, IsInt, IsOptional,
+    ArrayMinSize, IsArray, IsDate, IsInt, IsOptional,
     IsPhoneNumber, IsString, Min, ValidateIf, ValidateNested
 } from "class-validator";
 import { CreateDeliveryAddressDto } from "src/delivery-addresses/dto/create-delivery-addresses.dto";
@@ -25,7 +25,8 @@ export default class UpdateOrderDto {
 
     @ApiPropertyOptional({ description: 'Дата доставки', example: '2026-06-01' })
     @IsOptional()
-    @IsDateString()
+    @Type(() => Date)
+    @IsDate()
     delivery_date?: Date;
 
     @ApiPropertyOptional({ description: 'Имя получателя', example: 'Иван Иванов' })

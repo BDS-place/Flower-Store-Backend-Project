@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { ArrayMinSize, IsArray, IsDateString, IsInt, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Min, MinDate, ValidateIf, ValidateNested } from "class-validator";
+import { ArrayMinSize, IsArray, IsDate, IsInt, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Min, MinDate, ValidateIf, ValidateNested } from "class-validator";
 import { CreateDeliveryAddressDto } from "src/delivery-addresses/dto/create-delivery-addresses.dto";
 import { OrderProductsDto } from "./order-products.dto";
 
@@ -19,7 +19,8 @@ export default class CreateOrderDto{
 
 
     @IsNotEmpty()
-    @IsDateString()
+    @Type(() => Date)
+    @IsDate()
     @MinDate(new Date())
     delivery_date!:Date
 

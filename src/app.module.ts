@@ -25,16 +25,24 @@ import { RedisCacheModule } from './redis-cache/redis-cache.module';
   }),TypeOrmModule.forRootAsync({
     imports:[ConfigModule],
     inject:[ConfigService],
-    useFactory: (config: ConfigService) =>({
-    type:'mysql',
-    host: "127.0.0.1",
-    port:3306,
-    username:config.get<string>('DB_PROFILE'),
-    password:config.get<string>('DB_PASSWORD'),
-    database:'flower_store_db',
-    entities:[__dirname+'/**/*.entity{.ts,.js}'],
-    synchronize:false
-    })
+    useFactory: (config: ConfigService) => {
+      const port = Number(config.get<string>('DB_PORT') ?? '5432');
+
+      if (!Number.isInteger(port)) {
+        throw new Error('DB_PORT must be a valid integer');
+      }
+
+      return {
+        type:'postgres',
+        host: config.get<string>('DB_HOST', '127.0.0.1'),
+        port,
+        username: config.get<string>('DB_USER') ?? config.get<string>('DB_PROFILE'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_NAME', 'flower_store_db'),
+        entities:[__dirname+'/**/*.entity{.ts,.js}'],
+        synchronize:false
+      };
+    }
   }), ServeStaticModule.forRoot({
     rootPath: join(__dirname, '..', 'uploads'),
     serveRoot: '/uploads'

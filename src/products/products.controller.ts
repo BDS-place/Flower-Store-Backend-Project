@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -29,8 +29,8 @@ export class ProductsController {
     findAll(
         @Query('sortBy') sortBy: string = 'created_at',
         @Query('order') order: 'ASC' | 'DESC' = 'DESC',
-        @Query('page', ParseIntPipe) page: number = 1,
-        @Query('limit',ParseIntPipe) limit: number = 20,
+        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+        @Query('limit',new DefaultValuePipe(20),ParseIntPipe) limit: number,
         @Query('type') type?: number,
         @Query('search') search?: string,
     ){

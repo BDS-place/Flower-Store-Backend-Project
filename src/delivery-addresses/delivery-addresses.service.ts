@@ -13,7 +13,7 @@ export class DeliveryAddressesService {
     ){}
 
     async create(dto:CreateDeliveryAddressDto){
-        const existing = await this.DeliveryAddressesRepository.findOne({where:[{city:dto.city},{street:dto.street},{house:dto.house},{apartment_number:dto.apartment_number}]})
+        const existing = await this.DeliveryAddressesRepository.findOne({where:{city:dto.city,street:dto.street,house:dto.house,apartment_number:dto.apartment_number}})
         if(existing) return existing;
         const deliveryAddress = this.DeliveryAddressesRepository.create(dto)
         return this.DeliveryAddressesRepository.save(deliveryAddress)
@@ -36,20 +36,19 @@ export class DeliveryAddressesService {
             apartment_number: dto.apartment_number ?? deliveryAddress.apartment_number,
         };
         const existing = await this.DeliveryAddressesRepository.findOne({
-            where:
-            [
-                {city:merged.city},
-                {street:merged.street},
-                {house:merged.house},
-                {apartment_number:merged.apartment_number}
-            ]})
-        if(existing) throw new ConflictException('Такой адрес уже есть');
+            where:{
+                city:merged.city,
+                street:merged.street,
+                house:merged.house,
+                apartment_number:merged.apartment_number}
+            })
+        if(existing && existing.delivery_address_id !== id) throw new ConflictException('Такой адрес уже есть');
         Object.assign(deliveryAddress, merged);
         return this.DeliveryAddressesRepository.save(deliveryAddress);
     }
     async delete(id:number){
         const result = await this.DeliveryAddressesRepository.delete(id)
-        if(result.affected) return new NotFoundException('Адрес не найден');
+        if(result.affected === 0) throw new NotFoundException('Адрес не найден');
         return {success: true, deletedId: id}
     }
 }

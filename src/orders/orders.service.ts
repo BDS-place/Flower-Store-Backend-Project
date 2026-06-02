@@ -70,7 +70,7 @@ export class OrdersService {
             return order
         })
     }
-    async update(id:number, dto:UpdateOrderDto){
+    async update(orderId:number, userId:number, dto:UpdateOrderDto){
         const {delivery_address_id, delivery_address} = dto
         let deliveryAddress: DeliveryAddresses;
         if(delivery_address_id){
@@ -79,13 +79,13 @@ export class OrdersService {
             deliveryAddress = await this.addressRepository.create(delivery_address)
         }
         return await this.dataSource.transaction(async(manager)=>{
-            const order = await manager.findOne(Orders,{where:{order_id:id}, relations: ['order_products', 'order_products.product']})
+            const order = await manager.findOne(Orders,{where:{order_id:orderId, user:{user_id:userId}}, relations: ['order_products', 'order_products.product']})
             if(!order) throw new NotFoundException('Заказ не найден')
             if(dto.products){
                 for (const op of order.order_products) {
                     op.product.stock_quantity += op.quantity
                 }
-                await manager.delete(OrderProducts,{order: {order_id:id}})
+                await manager.delete(OrderProducts,{order: {order_id:orderId}})
                 const productIds = dto.products.map((p)=>p.product_id)
                 const products = await manager.findBy(Products, {product_id: In(productIds)})
                 if(products.length !== productIds.length) throw new NotFoundException('Некоторых товаров не существует');
@@ -122,14 +122,22 @@ export class OrdersService {
             return order
         })
     }
-    async findOneById(id:number){
-        const order = await this.ordersReposiroty.findOne({where: {order_id: id}})
+    async findOneById(orderId:number, userId:number){
+        const order = await this.ordersReposiroty.findOne({where: {order_id: orderId, user:{user_id:userId}}})
         if(!order) throw new NotFoundException('Заказ не найден')
         return order
     }
-    async delete(id: number){
-        const result = await this.ordersReposiroty.delete(id)
+    async delete(orderId: number, userId:number){
+        const result = await this.ordersReposiroty.delete({order_id:orderId, user:{user_id:userId}})
         if(result.affected === 0) throw new NotFoundException('Заказ не найден')
-        return {success: true, deletedId: id}
+        return {success: true, deletedId: orderId}
+    }
+    async findAllByUserId(id: number) {
+        return this.ordersReposiroty.find({
+            where: {
+            user: { user_id: id },
+            },
+            relations: ['delivery_address_id', 'order_products', 'order_products.product'],
+        });
     }
 }

@@ -1,7 +1,8 @@
+// redis-cache.module.ts
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import  createKeyvAdapter  from '@keyv/redis';
+import { createKeyv } from '@keyv/redis';
 
 @Module({
   imports: [
@@ -11,9 +12,9 @@ import  createKeyvAdapter  from '@keyv/redis';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         stores: [
-          new createKeyvAdapter(`redis://${config.get('REDIS_HOST', 'localhost')}:${config.get('REDIS_PORT', 6379)}`),
+          createKeyv(`redis://${config.get('REDIS_HOST', 'localhost')}:${config.get('REDIS_PORT', 6379)}`),
         ],
-        ttl: 60 * 1000, 
+        ttl: 60 * 1000, // 60 секунд
       }),
     }),
   ],
